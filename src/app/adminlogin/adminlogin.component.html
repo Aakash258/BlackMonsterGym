@@ -1,0 +1,184 @@
+<div class="gradient-custom">
+    <section>
+        <div class="container py-5">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5" style="padding-top: 5%;">
+                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
+
+                            <div class="mb-md-5 mt-md-4 pb-5" *ngIf='!checkloginstatus()'>
+
+                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                                <form [formGroup]='loginform' (ngSubmit)='onLogin()'>
+                                    <p class="text-white-50 mb-5">Please enter your login and password!</p>
+
+                                    <div class="form-outline form-white mb-4">
+
+                                        <input type="email" id="typeEmailX" formControlName='email'
+                                            class="form-control form-control-lg" />
+                                        <label class="form-label" for="typeEmailX">Email</label>
+                                    </div>
+
+                                    <div class="form-outline form-white mb-4">
+                                        <input type="password" id="typePasswordX" class="form-control form-control-lg"
+                                            formControlName='password' />
+                                        <label class="form-label" for="typePasswordX">Password</label>
+                                    </div>
+
+                                    <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot
+                                            password?</a></p>
+
+                                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+                                </form>
+                                <span *ngIf="loginform.invalid && loginform.touched"
+                                    class="alert text-danger"><b>Credentials required</b></span>
+                            </div>
+
+                            <!-- <div>
+                    <p class="mb-0">Don't have an account? <a href="#!" class="text-white-50 fw-bold">Sign Up</a></p>
+                  </div> -->
+                            <h2><b>Black Monster</b></h2>
+                            <div *ngIf='checkloginstatus() && !(ShowAddForm || deleteproduct || showmembers)'>
+                                <button (click)='showaddform()' class="btn btn-primary btn-block btn-lg"
+                                    style="margin: 2%;">Add
+                                    Product </button><br>
+                                <button (click)='showDeleteProduct()' class="btn btn-primary btn-block btn-lg"
+                                    style="margin: 2%;">Delete
+                                    Product</button><br>
+                                <button (click)="showMembers()" class="btn btn-primary btn-block btn-lg"
+                                    style="margin: 2%;">Show
+                                    Members</button><br>
+                                <button class="btn btn-danger btn-sm" style="margin: 2%; margin-top: 15%;"
+                                    (click)="logout()">Logout</button><br>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add Product -->
+                <div *ngIf='checkloginstatus() && ShowAddForm'>
+                    <div class="container mt-5 mb-5 d-flex justify-content-center">
+                        <div class="card px-1 py-4">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3">Add Product info :</h6>
+
+                                <form [formGroup]="addProductForm"
+                                    (ngSubmit)="uploadProductImage(addProductForm.value)">
+                                    <div class="row">
+
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <!-- <label for="name">Name</label> --> <input class="form-control"
+                                                    type="text" placeholder="Name" formControlName="name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="input-group"> <input class="form-control" type="number"
+                                                        placeholder="Price" formControlName="price"> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="input-group"> <input class="form-control" type="text"
+                                                        placeholder="Description" formControlName="description"> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <input class="form-control" type="file" accept="image/*"
+                                                        placeholder="Image" formControlName="imageUrl"
+                                                        (change)="chooseImg($event)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-success btn-block">
+                                        <span *ngIf="!isSubmitted">Add Product</span>
+
+                                        <span *ngIf="isSubmitted" class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        <span *ngIf="isSubmitted" class="sr-only">Uploading...</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Product -->
+                <div *ngIf='checkloginstatus() && deleteproduct'>
+
+                    <div class="row container-fluid" style="margin-top: 4%;">
+
+                        <div *ngFor='let product of products' class="col-sm-3"
+                            style="margin-top: 2%; margin-bottom: 2%;">
+                            <div class="card" style="width: 18rem; z-index: 0;">
+                                <!-- <img src={{product.imgsrc}} class="card-img-top"  -->
+                                <!-- style=" width: 100%;
+                                height: 15vw;
+                                object-fit: contain; min-height: 10rem;" 
+                                alt="..."> -->
+                                <img src={{product.payload.doc.data().imageUrl}} class="card-img-top" style=" width: 100%;
+            height: 15vw;
+            object-fit: contain; min-height: 10rem;" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        {{product.payload.doc.data().name}}-----{{product.payload.doc.data().price}}
+                                    </h5>
+                                    <p class="card-text">{{product.payload.doc.data().description}}</p>
+                                    <button style="width: 100%;" href="#" class="btn btn-primary btn-block btn-lg"
+                                        (click)="deleteProduct(product.payload.doc.id)">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Show Members -->
+                <div *ngIf='checkloginstatus() && showmembers'>
+
+                    <div class="row container-fluid" style="margin-top: 4%;">
+
+                        <div *ngFor='let member of members' class="col-sm-3" style="margin-top: 2%; margin-bottom: 2%;">
+                            <div class="card" style="width: 18rem; z-index: 0;">
+                                <!-- <img src={{product.imgsrc}} class="card-img-top"  -->
+                                <!-- style=" width: 100%;
+                                height: 15vw;
+                                object-fit: contain; min-height: 10rem;" 
+                                alt="..."> -->
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        {{member.payload.doc.data().firstname}}&nbsp;{{member.payload.doc.data().lastname}}
+                                    </h5>
+                                    <p class="card-text">{{member.payload.doc.data().phone}}</p>
+                                    <p class="card-text">{{member.payload.doc.data().email}}</p>
+                                    <p class="card-text">{{member.payload.doc.data().gender}}</p>
+                                    <p class="card-text">{{member.payload.doc.data().age}}</p>
+                                    <!-- <button style="width: 100%;" href="#"
+                                        class="btn btn-primary btn-block btn-lg"
+                                        (click)="deleteProduct(product.payload.doc.id)">Delete</button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button *ngIf="ShowAddForm || deleteproduct || showmembers" (click)="back()"
+                    class="btn btn-danger btn-outline-light btn-sm"
+                    style="position: sticky; bottom: 0; width: 30%;">Back</button>
+            </div>
+        </div>
+    </section>
+</div>

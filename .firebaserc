@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "blackmonster71021": {
+      "hosting": {
+        "bmgym": [
+          "blackmonster71021"
+        ]
+      }
+    }
+  }
+}
