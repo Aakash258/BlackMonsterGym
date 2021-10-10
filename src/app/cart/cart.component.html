@@ -23,7 +23,7 @@
             </thead>
             <tbody>
 
-                <tr *ngFor="let cartItem of populateCart()">
+                <tr *ngFor="let cartItem of populateCart()[0]">
                     <td>
                         <div class="product-item">
                             <a class="product-thumb" ><img src={{cartItem.payload.doc.data().imageUrl}} alt="Product"></a>
@@ -52,7 +52,7 @@
     </div>
     <div class="shopping-cart-footer">
         
-        <div class="column text-lg" style="text-align: center;"><b>Total Amount: </b><span class="text-medium">$289.68</span></div>
+        <div class="column text-lg" style="text-align: center;"><b>Total Amount: </b><span class="text-medium">${{ populateCart()[1] }}</span></div>
     </div>
     <div class="shopping-cart-footer">
         <div class="column"><a  data-bs-dismiss="offcanvas" class="btn btn-outline-secondary" ><i  class="icon-arrow-left"></i>&nbsp;Back to Shopping</a></div>
